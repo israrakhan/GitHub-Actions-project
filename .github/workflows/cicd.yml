@@ -30,6 +30,17 @@ jobs:
     needs: compile
     steps:
     - uses: actions/checkout@v4
+    - name: Set up JDK 17 with Maven cache
+      uses: actions/setup-java@v5
+      with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+    - name: Warm Maven cache to avoid 429 rate limits
+      run: mvn -B -DskipTests dependency:go-offline
+
+    
     - name: Trivy Installation
       run: |
         sudo apt-get install wget gnupg
